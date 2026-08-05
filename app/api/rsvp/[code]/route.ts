@@ -1,0 +1,3 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+export async function GET(_:Request,{params}:{params:Promise<{code:string}>}){const {code}=await params;const supabase=await createClient();const {data,error}=await supabase.rpc("get_rsvp_household",{invitation_code:code});if(error)return NextResponse.json({error:"We couldn’t find that invitation."},{status:404});if(!data)return NextResponse.json({error:"We couldn’t find that invitation."},{status:404});return NextResponse.json({...data,couple_names:"The Hume Wedding",wedding_date:"2027-03-20",rsvp_deadline:null,meal_options:[]},{headers:{"Cache-Control":"no-store"}})}
