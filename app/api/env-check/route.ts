@@ -14,8 +14,5 @@ export async function GET() {
     anonKeyPresent: Boolean(
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
     ),
-    siteUrlPresent: Boolean(
-      process.env.NEXT_PUBLIC_SITE_URL?.trim()
-    ),
   })
 }
