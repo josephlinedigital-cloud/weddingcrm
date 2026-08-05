@@ -1,2 +1,6 @@
 import { redirect } from "next/navigation";
-export default function Home() { redirect(process.env.NEXT_PUBLIC_SUPABASE_URL ? "/dashboard" : "/login"); }
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+
+export default function Home() {
+  redirect(isSupabaseConfigured ? "/dashboard" : "/login");
+}

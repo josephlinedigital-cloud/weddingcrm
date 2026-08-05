@@ -1,17 +1,28 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+
+const supabaseKey = (
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)?.trim();
+
+export const isSupabaseConfigured = Boolean(
+  supabaseUrl &&
+  supabaseKey
+);
+
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
   const isPublic = request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname.startsWith("/forgot-password") || request.nextUrl.pathname.startsWith("/auth/callback") || request.nextUrl.pathname.startsWith("/rsvp") || request.nextUrl.pathname.startsWith("/api/rsvp");
-  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !publishableKey) {
+  if (!supabaseUrl || !supabaseKey) {
     if (isPublic) return response;
     const url = request.nextUrl.clone(); url.pathname = "/login"; return NextResponse.redirect(url);
   }
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    publishableKey,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll: () => request.cookies.getAll(),

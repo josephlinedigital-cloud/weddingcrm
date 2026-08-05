@@ -18,14 +18,15 @@ Requirements: Node.js 20 or later, npm, a free Supabase project, and optionally 
 ## Environment variables
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SITE_URL=
 ```
 
 Only the Supabase publishable/anon key belongs in the application. Never add `SUPABASE_SERVICE_ROLE_KEY` to a `NEXT_PUBLIC_` variable or expose it to the browser. Wedding HQ does not need a service-role key at runtime.
 
-For production, set `NEXT_PUBLIC_APP_URL` to the final `https://...vercel.app` or custom domain URL. Add the same URL under **Supabase → Authentication → URL Configuration**, with `/**` as an allowed redirect path.
+For production, set `NEXT_PUBLIC_SITE_URL` to the final `https://...vercel.app` or custom domain URL. Add the same URL under **Supabase → Authentication → URL Configuration**, with `/**` as an allowed redirect path.
 
 ## Supabase setup and migrations
 
@@ -81,13 +82,13 @@ npm run build
 npm run lint
 ```
 
-If the login screen says Supabase is not configured, confirm `.env.local` exists, then restart the development server.
+If the login screen says Supabase is not configured, check the environment variables for the current deployment and redeploy after correcting them.
 
 ## Deploying to Vercel
 
 1. Import the repository into Vercel as a Next.js project.
 2. Add all three environment variables from `.env.example` under **Project Settings → Environment Variables**.
-3. Set `NEXT_PUBLIC_APP_URL` to the production URL and deploy.
+3. Set `NEXT_PUBLIC_SITE_URL` to the production URL and deploy.
 4. Add that production URL and `/auth/callback` to the allowed redirects in Supabase Authentication.
 5. Keep the Supabase service-role key out of Vercel; the app uses authenticated RLS and restricted public database functions.
 
